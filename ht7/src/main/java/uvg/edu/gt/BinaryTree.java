@@ -3,13 +3,19 @@ package uvg.edu.gt;
 public class BinaryTree<E extends Comparable<E>> {
     private Node<E> root;
 
-    // Clase Node definida como interna de BinaryTree
-    private static class Node<E> {
-        E value; // El valor almacenado en este nodo
-        Node<E> left; // Referencia al hijo izquierdo
-        Node<E> right; // Referencia al hijo derecho
+    protected Node<E> getRoot() {
+        return root;
+    }
 
-        // Constructor que inicializa el nodo con un valor dado y sin hijos
+    protected void setRoot(Node<E> root) {
+        this.root = root;
+    }
+
+    protected static class Node<E> {
+        E value;
+        Node<E> left;
+        Node<E> right;
+
         public Node(E value) {
             this.value = value;
             this.left = null;
