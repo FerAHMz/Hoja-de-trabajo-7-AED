@@ -1,51 +1,60 @@
 package uvg.edu.gt;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        // Crear el diccionario como un árbol binario de búsqueda
-        BinaryTree<Association<String, String>> dictionary = new BinaryTree<>();
+        DictionaryBinaryTree<String, String> dictionary = new DictionaryBinaryTree<>();
 
-        // Insertar algunas asociaciones de palabras inglés-español
-        dictionary.insert(new Association<>("house", "casa"));
-        dictionary.insert(new Association<>("dog", "perro"));
-        dictionary.insert(new Association<>("homework", "tarea"));
-        dictionary.insert(new Association<>("woman", "mujer"));
-        dictionary.insert(new Association<>("town", "pueblo"));
-        dictionary.insert(new Association<>("yes", "si"));
+        // Leer y llenar el diccionario desde el archivo
+        loadDictionaryFromFile(dictionary, "diccionario.txt");
 
         // Mostrar el diccionario ordenado (in-order traversal)
         System.out.println("Diccionario Inglés-Español:");
         dictionary.inOrder();
 
-        // Texto a traducir
-        String text = "The woman asked me to do my homework about my town.";
-
-        // Traducir el texto
-        String translatedText = translateText(dictionary, text);
-
-        // Mostrar el texto traducido
+        // Procesar el texto desde archivo y traducir
+        String translatedText = translateTextFromFile(dictionary, "texto.txt");
         System.out.println("\nTexto traducido:");
         System.out.println(translatedText);
     }
 
-    private static String translateText(BinaryTree<Association<String, String>> dictionary, String text) {
-        StringBuilder translatedText = new StringBuilder();
-        String[] words = text.split(" ");
-    
-        for (String word : words) {
-            String lowerCaseWord = word.toLowerCase();
-            // Asume que tienes un método adecuado para buscar por clave.
-            String translatedWord = dictionary.searchByKey(lowerCaseWord); // Usando el nuevo método
-    
-            if (translatedWord != null) {
-                translatedText.append(translatedWord).append(" ");
-            } else {
-                translatedText.append("*").append(word).append("* ").append(" ");
+    private static void loadDictionaryFromFile(DictionaryBinaryTree<String, String> dictionary, String fileName) {
+        try {
+            Scanner scanner = new Scanner(new File(fileName));
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(", ");
+                if (parts.length == 2) {
+                    dictionary.insert(new Association<>(parts[0].trim(), parts[1].trim()));
+                }
             }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo no encontrado: " + fileName);
         }
-    
+    }
+
+    private static String translateTextFromFile(DictionaryBinaryTree<String, String> dictionary, String fileName) {
+        StringBuilder translatedText = new StringBuilder();
+        try {
+            Scanner scanner = new Scanner(new File(fileName));
+            while (scanner.hasNext()) {
+                String word = scanner.next().replaceAll("[^a-zA-Z ]", "").toLowerCase(); // Elimina puntuación y convierte a minúsculas
+                String translatedWord = dictionary.searchByKey(word);
+                if (translatedWord != null) {
+                    translatedText.append(translatedWord).append(" ");
+                } else {
+                    translatedText.append("*").append(word).append("* ").append(" ");
+                }
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo no encontrado: " + fileName);
+            return "";
+        }
         return translatedText.toString().trim();
     }
-    
 }
-
