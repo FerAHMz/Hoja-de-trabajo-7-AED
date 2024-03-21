@@ -8,15 +8,21 @@ public class Main {
     public static void main(String[] args) {
         DictionaryBinaryTree<String, String> dictionary = new DictionaryBinaryTree<>();
 
-        // Leer y llenar el diccionario desde el archivo
-        loadDictionaryFromFile(dictionary, "diccionario.txt");
+        // Define las rutas absolutas a los archivos
+        String diccionarioPath = "ht7\\diccionario.txt";
+        String textoPath = "ht7\\texto.txt";
+
+        // Cargar el diccionario desde el archivo
+        loadDictionaryFromFile(dictionary, diccionarioPath);
 
         // Mostrar el diccionario ordenado (in-order traversal)
         System.out.println("Diccionario Inglés-Español:");
         dictionary.inOrder();
 
-        // Procesar el texto desde archivo y traducir
-        String translatedText = translateTextFromFile(dictionary, "texto.txt");
+        // Traducir el texto desde el archivo
+        String translatedText = translateTextFromFile(dictionary, textoPath);
+        
+        // Mostrar el texto traducido
         System.out.println("\nTexto traducido:");
         System.out.println(translatedText);
     }
