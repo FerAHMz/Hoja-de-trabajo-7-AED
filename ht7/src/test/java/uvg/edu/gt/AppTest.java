@@ -1,20 +1,21 @@
 package uvg.edu.gt;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-{
-    /**
-     * Rigorous Test :-)
-     */
+class BinaryTreeTest {
+
     @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
+    void insertAndSearchTest() {
+        BinaryTree<Association<String, String>> tree = new BinaryTree<>();
+        Association<String, String> association = new Association<>("dog", "perro");
+        
+        tree.insert(association);
+        Association<String, String> result = tree.search(association);
+        
+        assertNotNull(result);
+        assertEquals("perro", result.getValue());
     }
 }
+
